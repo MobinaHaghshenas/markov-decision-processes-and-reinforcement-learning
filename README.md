@@ -39,15 +39,11 @@ $
 
 The available inventory before demand is capped at the system capacity:
 
-$
-I_t=\min(s_t+a_t,3).
-$
+$I_t=\min(s_t+a_t,3).$
 
 The inventory carried into the next period is
 
-$
-s_{t+1}=\max(I_t-D_t,0).
-$
+$s_{t+1}=\max(I_t-D_t,0).$
 
 Unmet demand is
 
