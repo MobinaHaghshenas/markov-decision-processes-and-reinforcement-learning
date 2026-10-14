@@ -97,7 +97,7 @@ s'=\max(\min(s+a,3)-d,0)
 \right],
 $$
 
-where $p(0)=0.1$, $p(2)=0.4$, $p(3)=0.5$, and $\mathbf{1}[\cdot]$ is the indicator function.
+where $p(0)=0.1$, $p(2)=0.4$, and $p(3)=0.5$. The indicator function $\mathbf{1}[A]$ equals 1 when condition $A$ is true and 0 otherwise. Here, it makes a demand outcome contribute its probability only when it leads to the specified next state $s'$.
 
 For each action $a$, the action-specific TPM is the matrix
 
@@ -136,17 +136,17 @@ The code computes these values alongside the transition probabilities. Together,
 The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation
 
 $$
-V^*(s)=\max_{a\in\mathcal A}
+V^{*}(s)=\max_{a\in\mathcal A}
 \left[
 r(s,a)+\gamma\sum_{s'\in\mathcal S}
-P(s'\mid s,a)V^*(s')
+P(s'\mid s,a)V^{*}(s')
 \right].
 $$
 
 The optimal ordering policy is
 
 $$
-\pi^*(s)=\arg\max_{a\in\mathcal A}
+\pi^{*}(s)=\arg\max_{a\in\mathcal A}
 \left[
 r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')
 \right].
