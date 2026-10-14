@@ -136,18 +136,13 @@ The code computes these values alongside the transition probabilities. Together,
 The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation
 
 $$
-V^{*}(s)=\max_{a\in\mathcal A}
-\left[r(s,a)+\gamma\sum_{s'\in\mathcal S}
-P(s'\mid s,a)V^{*}(s')
-\right].
+V^{*}(s)=\max_{a\in\mathcal A}\left[r(s,a)+\gamma\sum_{s'\in\mathcal S}P(s'\mid s,a)V^{*}(s')\right].
 $$
 
 The optimal ordering policy is
 
 $$
-\pi^{*}(s)=\arg\max_{a\in\mathcal A}
-\left[r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')
-\right].
+\pi^{*}(s)=\arg\max_{a\in\mathcal A}\left[r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')\right].
 $$
 
 Two algorithms are implemented:
@@ -172,12 +167,7 @@ The average-reward policy iteration and value iteration implementations use this
 
 Q-learning learns action values from sampled transitions rather than requiring the transition matrix as input. The update is
 
-$$
-Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t
-\left[
-r_t+\gamma\max_{a'}Q_t(s_{t+1},a')-Q_t(s_t,a_t)
-\right].
-$$
+$$Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t\left[r_t+\gamma\max_{a'}Q_t(s_{t+1},a')-Q_t(s_t,a_t)\right].$$
 
 The implementation uses $\gamma=0.8$, a base learning-rate parameter $\alpha=0.5$, and a uniformly random behavior policy to select actions during training. It records the number of visits $v(s,a)$ for each state-action pair and uses
 
