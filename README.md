@@ -139,8 +139,7 @@ $$V^\ast(s) = \max_{a \in A} \sum_{s' \in S} P(s' \mid s,a) \left[ R(s,a,s') + \
 
 The optimal ordering policy is:
 
-$$pi^{*}(s)=\arg\max_{a\in A}\sum_{s'\in S}P(s' \mid s,a)\left[R(s,a,s')+\gamma V^{*}(s')\right]$$
-
+$$\pi^\ast(s) = \arg\max_{a \in A} \sum_{s' \in S} P(s' \mid s,a) \left[ R(s,a,s') + \gamma V^\ast(s') \right]$$
 
 Two algorithms are implemented:
 
