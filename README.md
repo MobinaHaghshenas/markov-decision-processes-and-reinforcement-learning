@@ -137,8 +137,7 @@ The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellm
 
 $$
 V^{*}(s)=\max_{a\in\mathcal A}
-\left[
-r(s,a)+\gamma\sum_{s'\in\mathcal S}
+\left[r(s,a)+\gamma\sum_{s'\in\mathcal S}
 P(s'\mid s,a)V^{*}(s')
 \right].
 $$
@@ -147,8 +146,7 @@ The optimal ordering policy is
 
 $$
 \pi^{*}(s)=\arg\max_{a\in\mathcal A}
-\left[
-r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')
+\left[r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')
 \right].
 $$
 
