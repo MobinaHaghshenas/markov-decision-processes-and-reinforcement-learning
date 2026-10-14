@@ -141,9 +141,9 @@ $$
 
 The optimal ordering policy is:
 
-$$
-\pi^(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^(s') \right]
-$$
+$$\pi^(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^(s') \right]$$
+
+
 Two algorithms are implemented:
 
 - **Policy iteration:** alternates policy evaluation and policy improvement. Policy evaluation solves $(I-\gamma P_{\pi})V_{\pi}=r_{\pi}$.
