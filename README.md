@@ -135,13 +135,11 @@ The code computes these values alongside the transition probabilities. Together,
 
 The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation:
 
-$$
-V^*(s) = \max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]
-$$
+$$V^*(s) = \max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]$$
 
 The optimal ordering policy is:
 
-$\pi^*(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]$
+$$\pi^*(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]$$
 
 
 Two algorithms are implemented:
