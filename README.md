@@ -32,7 +32,7 @@ The demand probabilities are
 $$
 \Pr(D_t=0)=0.1,\qquad
 \Pr(D_t=2)=0.4,\qquad
-\Pr(D_t=3)=0.5.
+\Pr(D_t=3)=0.5
 $$
 
 ### 2. Inventory and transition equations
@@ -40,25 +40,25 @@ $$
 The available inventory before demand is capped at the system capacity:
 
 $$
-I_t=\min(s_t+a_t,3).
+I_t=\min(s_t+a_t,3)
 $$
 
 The inventory carried into the next period is
 
 $$
-s_{t+1}=\max(I_t-D_t,0).
+s_{t+1}=\max(I_t-D_t,0)
 $$
 
 Unmet demand is
 
 $$
-U_t=\max(D_t-I_t,0).
+U_t=\max(D_t-I_t,0)
 $$
 
 Thus, for a particular demand realization $d$, the transition function is
 
 $$
-s'=\max(\min(s+a,3)-d,0).
+s'=\max(\min(s+a,3)-d,0)
 $$
 
 ### 3. Cost and reward
@@ -74,7 +74,7 @@ where $I=\min(s+a,3)$ and $s'=\max(I-d,0)$.
 The algorithms maximize reward, so cost is converted into a negative reward:
 
 $$
-R(s,a,d)=-C(s,a,d).
+R(s,a,d)=-C(s,a,d)
 $$
 
 Therefore, maximizing expected reward is equivalent to minimizing expected cost under the same model.
@@ -84,7 +84,7 @@ Therefore, maximizing expected reward is equivalent to minimizing expected cost 
 For every state-action pair, the transition probability to state $s'$ is
 
 $$
-P(s'\mid s,a)=\Pr(S_{t+1}=s'\mid S_t=s,A_t=a).
+P(s'\mid s,a)=\Pr(S_{t+1}=s'\mid S_t=s,A_t=a)
 $$
 
 Given the three possible demand values,
@@ -102,7 +102,7 @@ where $p(0)=0.1$, $p(2)=0.4$, and $p(3)=0.5$. The indicator function $\mathbf{1}
 For each action $a$, the action-specific TPM is the matrix
 
 $$
-P^{(a)}_{s,s'}=P(s'\mid s,a),\qquad s,s'\in\mathcal S.
+P^{(a)}_{s,s'}=P(s'\mid s,a),\qquad s,s'\in\mathcal S
 $$
 
 The implementation constructs all four action-specific TPMs from the same transition function.
@@ -112,19 +112,19 @@ The implementation constructs all four action-specific TPMs from the same transi
 The expected one-step reward for state $s$ and action $a$ is
 
 $$
-r(s,a)=\mathbb{E}[R(s,a,D)].
+r(s,a)=\mathbb{E}[R(s,a,D)]
 $$
 
 Equivalently,
 
 $$
-r(s,a)=\sum_{d\in\{0,2,3\}}p(d)R(s,a,d).
+r(s,a)=\sum_{d\in\{0,2,3\}}p(d)R(s,a,d)
 $$
 
 For each action $a$, the action-specific expected-reward vector is
 
 $$
-r^{(a)}_s=r(s,a),\qquad s\in\mathcal S.
+r^{(a)}_s=r(s,a),\qquad s\in\mathcal S
 $$
 
 The code computes these values alongside the transition probabilities. Together, the four action-specific TPMs and four reward vectors define the finite MDP.
@@ -135,11 +135,15 @@ The code computes these values alongside the transition probabilities. Together,
 
 The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation:
 
-$$ V^{*}(s) = \max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right] $$
+$$ \[
+V^{*}(s)=\max_{a\in A}\sum_{s'\in S}P(s' \mid s,a)\left[R(s,a,s')+\gamma V^{*}(s')\right]
+\] $$
 
 The optimal ordering policy is:
 
-$$ \pi^{*}(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right] $$
+$$ \[
+\pi^{*}(s)=\arg\max_{a\in A}\sum_{s'\in S}P(s' \mid s,a)\left[R(s,a,s')+\gamma V^{*}(s')\right]
+\] $$
 
 
 Two algorithms are implemented:
@@ -152,7 +156,7 @@ Two algorithms are implemented:
 For the long-run average-reward formulation, the average reward $\rho$ and relative value (bias) function $h(s)$ satisfy:
 
 $$
-\rho+h(s)=\max_{a\in\mathcal{A}}\left(r(s,a)+\sum_{s^{\prime}\in\mathcal{S}}P(s^{\prime}\mid s,a)h(s^{\prime})\right).
+\rho+h(s)=\max_{a\in\mathcal{A}}\left(r(s,a)+\sum_{s^{\prime}\in\mathcal{S}}P(s^{\prime}\mid s,a)h(s^{\prime})\right)
 $$
 
 The average-reward policy iteration and value iteration implementations use this formulation. Unlike the discounted formulation, this equation does not use the discount factor.
@@ -162,19 +166,19 @@ The average-reward policy iteration and value iteration implementations use this
 Q-learning learns action values from sampled transitions rather than requiring the transition matrix as input. The update is:
 
 $$
-Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t\left(r_t+\gamma\max_{a^{\prime}}Q_t(s_{t+1},a^{\prime})-Q_t(s_t,a_t)\right).
+Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t\left(r_t+\gamma\max_{a^{\prime}}Q_t(s_{t+1},a^{\prime})-Q_t(s_t,a_t)\right)
 $$
 
 The implementation uses $\gamma=0.8$, a base learning-rate parameter $\alpha=0.5$, and a uniformly random behavior policy to select actions during training. It records the number of visits $v(s,a)$ for each state-action pair and uses:
 
 $$
-\alpha_t=\frac{0.5}{v(s_t,a_t)}.
+\alpha_t=\frac{0.5}{v(s_t,a_t)}
 $$
 
 After training, the reported policy is greedy with respect to the learned Q-table:
 
 $$
-\pi_Q(s)=\arg\max_{a\in\mathcal{A}}Q(s,a).
+\pi_Q(s)=\arg\max_{a\in\mathcal{A}}Q(s,a)
 $$
 
 Actions are selected randomly while collecting training experience, but the final reported policy chooses the action with the largest learned Q-value.
@@ -184,7 +188,7 @@ Actions are selected randomly while collecting training experience, but the fina
 The four dynamic-programming methods returned the same ordering policy in the recorded run:
 
 $$
-\boxed{\pi(s)=[2,1,0,0],\quad s=0,1,2,3.}
+\boxed{\pi(s)=[2,1,0,0],\quad s=0,1,2,3}
 $$
 
 | Current inventory $s$ | Order quantity from DP |
@@ -199,7 +203,7 @@ The recorded value-iteration runs converged in 111 iterations for discounted rew
 The recorded Q-learning run used 50,000 episodes and 30 steps per episode, with seed 7. Its learned greedy policy was
 
 $$
-\boxed{\pi_Q(s)=[2,1,0,2].}
+\boxed{\pi_Q(s)=[2,1,0,2]}
 $$
 
 The policies agree for inventory states 0, 1, and 2. At state 3, all order quantities produce the same available inventory because $\min(3+a,3)=3$; therefore, all actions are equivalent in the exact model. The difference between the reported actions at this state is a tie-breaking/estimation effect, not evidence of a substantively different optimal decision. The learned Q-values for state 3 were:
