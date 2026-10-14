@@ -133,43 +133,42 @@ The code computes these values alongside the transition probabilities. Together,
 
 ### Discounted-reward dynamic programming
 
-The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation
+The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation:
 
 $$
-V^{*}(s)=\max_{a\in\mathcal A}\left[r(s,a)+\gamma\sum_{s'\in\mathcal S}P(s'\mid s,a)V^{*}(s')\right].
+V^{*}(s)=\max_{a\in\mathcal{A}}\left(r(s,a)+\gamma\sum_{s^{\prime}\in\mathcal{S}}P(s^{\prime}\mid s,a)V^{*}(s^{\prime})\right).
 $$
 
-The optimal ordering policy is
+The optimal ordering policy is:
 
 $$
-\pi^{*}(s)=\arg\max_{a\in\mathcal A}\left[r(s,a)+\gamma\sum_{s'}P(s'\mid s,a)V^*(s')\right].
+\pi^{*}(s)=\arg\max_{a\in\mathcal{A}}\left(r(s,a)+\gamma\sum_{s^{\prime}\in\mathcal{S}}P(s^{\prime}\mid s,a)V^{*}(s^{\prime})\right).
 $$
 
 Two algorithms are implemented:
 
-- **Policy iteration:** alternates policy evaluation and policy improvement. Policy evaluation solves $(I-\gamma P_\pi)V_\pi=r_\pi$.
+- **Policy iteration:** alternates policy evaluation and policy improvement. Policy evaluation solves $(I-\gamma P_{\pi})V_{\pi}=r_{\pi}$.
 - **Value iteration:** repeatedly applies the Bellman optimality update until the value function converges.
 
 ### Average-reward dynamic programming
 
-For the long-run average-reward formulation, the average reward $\rho$ and relative value (bias) function $h(s)$ satisfy
+For the long-run average-reward formulation, the average reward $\rho$ and relative value (bias) function $h(s)$ satisfy:
 
 $$
-\rho+h(s)=\max_{a\in\mathcal A}
-\left[
-r(s,a)+\sum_{s'}P(s'\mid s,a)h(s')
-\right].
+\rho+h(s)=\max_{a\in\mathcal{A}}\left(r(s,a)+\sum_{s^{\prime}\in\mathcal{S}}P(s^{\prime}\mid s,a)h(s^{\prime})\right).
 $$
 
 The average-reward policy iteration and value iteration implementations use this formulation. Unlike the discounted formulation, this equation does not use the discount factor.
 
 ### Q-learning
 
-Q-learning learns action values from sampled transitions rather than requiring the transition matrix as input. The update is
+Q-learning learns action values from sampled transitions rather than requiring the transition matrix as input. The update is:
 
-$$Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t\left[r_t+\gamma\max_{a'}Q_t(s_{t+1},a')-Q_t(s_t,a_t)\right].$$
+$$
+Q_{t+1}(s_t,a_t)=Q_t(s_t,a_t)+\alpha_t\left(r_t+\gamma\max_{a^{\prime}}Q_t(s_{t+1},a^{\prime})-Q_t(s_t,a_t)\right).
+$$
 
-The implementation uses $\gamma=0.8$, a base learning-rate parameter $\alpha=0.5$, and a uniformly random behavior policy to select actions during training. It records the number of visits $v(s,a)$ for each state-action pair and uses
+The implementation uses $\gamma=0.8$, a base learning-rate parameter $\alpha=0.5$, and a uniformly random behavior policy to select actions during training. It records the number of visits $v(s,a)$ for each state-action pair and uses:
 
 $$
 \alpha_t=\frac{0.5}{v(s_t,a_t)}.
@@ -178,7 +177,7 @@ $$
 After training, the reported policy is greedy with respect to the learned Q-table:
 
 $$
-\pi_Q(s)=\arg\max_{a\in\mathcal A}Q(s,a).
+\pi_Q(s)=\arg\max_{a\in\mathcal{A}}Q(s,a).
 $$
 
 Actions are selected randomly while collecting training experience, but the final reported policy chooses the action with the largest learned Q-value.
