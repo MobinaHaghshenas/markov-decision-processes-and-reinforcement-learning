@@ -12,10 +12,10 @@ The implementation uses these assignment parameters:
 - Order quantity: 0, 1, 2, or 3 units.
 - Demand distribution: 0 units with probability 0.1, 2 units with probability 0.4, and 3 units with probability 0.5.
 - End-of-period holding cost: 10 per leftover unit.
-- Shortage penalty: 4 per unmet unit of demand.
+- Shortage penalty: 4 when shortage occurs; the assignment wording does not explicitly state whether this is per unmet unit or per period.
 - Discount factor for discounted methods and Q-learning: $\gamma=0.8$.
 
-The shortage penalty is modeled per unmet unit. This is an explicit modeling assumption in the shared model.
+The code currently interprets the shortage penalty as 4 per unmet unit of demand. The assignment states a penalty of 4 for lack of a blood pack, but does not unambiguously specify whether the penalty applies per unmet unit or once per period with shortage. Confirm this interpretation with the instructor; the results below are conditional on the per-unit interpretation.
 
 ## Mathematical formulation
 
@@ -136,12 +136,12 @@ The code computes these values alongside the transition probabilities. Together,
 The discount factor is $\gamma=0.8$. The optimal state value satisfies the Bellman optimality equation:
 
 $$
-V^(s) = \max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^(s') \right]
+V^*(s) = \max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]
 $$
 
 The optimal ordering policy is:
 
-$$\pi^(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^(s') \right]$$
+$\pi^*(s) = \arg\max_{a \in \mathcal{A}} \left[ r(s,a) + \gamma \sum_{s' \in \mathcal{S}} P(s' \mid s,a) V^*(s') \right]$
 
 
 Two algorithms are implemented:
@@ -204,7 +204,7 @@ $$
 \boxed{\pi_Q(s)=[2,1,0,2].}
 $$
 
-The policies agree for inventory states 0, 1, and 2. They differ at state 3. The learned Q-values for state 3 were:
+The policies agree for inventory states 0, 1, and 2. At state 3, all order quantities produce the same available inventory because $\min(3+a,3)=3$; therefore, all actions are equivalent in the exact model. The difference between the reported actions at this state is a tie-breaking/estimation effect, not evidence of a substantively different optimal decision. The learned Q-values for state 3 were:
 
 | Action (order quantity) | Learned $Q(3,a)$ |
 |---:|---:|
